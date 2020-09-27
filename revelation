@@ -5,11 +5,13 @@ set -o pipefail
 
 SCRIPT_DIR="$(readlink -f "$0" | xargs dirname)"
 
+IMAGE_TAG_NAME="revelation"
+
 pushd "$SCRIPT_DIR"
 
-docker build -t debian-stretch-revelation .
+docker build -t "$IMAGE_TAG_NAME" .
 docker run -it --rm \
-    --user=$(id -u $USER):$(id -g $USER) \
+    --user="$(id -u $USER):$(id -g $USER)" \
     --env="DISPLAY" \
     --workdir="/home/$USER" \
     --volume="/home/$USER:/home/$USER" \
@@ -18,7 +20,7 @@ docker run -it --rm \
     --volume="/etc/shadow:/etc/shadow:ro" \
     --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    debian-stretch-revelation \
+    "$IMAGE_TAG_NAME" \
     "$@"
 
 popd
