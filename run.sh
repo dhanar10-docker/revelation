@@ -5,22 +5,25 @@ set -o pipefail
 
 SCRIPT_DIR="$(readlink -f "$0" | xargs dirname)"
 
-IMAGE_TAG_NAME="revelation"
+NAME_TAG="revelation:latest"
 
 pushd "$SCRIPT_DIR"
 
-docker build -t "$IMAGE_TAG_NAME" .
-docker run -it --rm \
+docker build \
+    -t "$NAME_TAG" \
+    .
+docker run \
+    -it --rm \
     --user="$(id -u $USER):$(id -g $USER)" \
     --env="DISPLAY" \
-    --workdir="/home/$USER" \
     --volume="/home/$USER:/home/$USER" \
     --volume="/etc/group:/etc/group:ro" \
     --volume="/etc/passwd:/etc/passwd:ro" \
     --volume="/etc/shadow:/etc/shadow:ro" \
     --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    "$IMAGE_TAG_NAME" \
+    --workdir="/home/$USER" \
+    "$NAME_TAG" \
     "$@"
 
 popd
