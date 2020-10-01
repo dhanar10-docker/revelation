@@ -1,5 +1,7 @@
 FROM debian:stretch-slim
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 COPY detect-apt-proxy.sh /usr/bin
 
 RUN chmod +x /usr/bin/detect-apt-proxy.sh \
